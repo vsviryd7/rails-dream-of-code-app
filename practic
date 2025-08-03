@@ -1,0 +1,6 @@
+#Task1For each CodingClass, create a new Course record for that class in the Spring 2026 trimester.
+ spring_2026 = Trimester.find_or_create_by(year: "2026", term: "Spring")
+#loop
+upcoming_courses.each do |course|
+  puts course.coding_class.title
+end
