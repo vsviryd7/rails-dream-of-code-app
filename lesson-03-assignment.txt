@@ -1,0 +1,61 @@
+#Lesson 3 Assignment
+
+#1.Tables to add: topics , lesson_topics
+
+Table "topics" has Attributes: id, title
+Table "topics" has Associations:
+has_many :lesson_topics
+has_many :lessons, through: :lesson_topics
+
+Table "lesson_topics" has Attributes: id, lesson_id, topic_id 
+Table "lesson_topics" has Associations: 
+belongs_to :lesson
+belongs_to :topic
+
+Update the Lesson model with the following associations:
+has_many :lesson_topics
+has_many :topics, through: :lesson_topics
+
+#2-4.What columns are necessary for the associations you decided on?
+  "topics" table: 
+  -id(integer), pk
+  -title(string)
+  -created_at(datetime)
+  -updated_at(datetime)
+"lesson_topics" table:
+-id(integer),pk
+-lesson_id(integer),fk
+-topic_id(integer),fk
+-created_at(datetime)
+-updated_at(datetime)
+
+#5-6: Generate the migration file for the topics table.
+bin/rails generate migration CreateTopics title:string
+
+#7:Run Your Migrations
+bin/rails db:migrate
+
+#8Add the Topic model before moving on.
+bin/rails generate model Topic
+
+#9 -10 Now determine the generator command you'll need to create the migration file for the join table.
+bin/rails generate migration create_lesson_topics lesson:references topic:references
+
+#11Run the migration.
+bin/rails db:migrate
+
+#12 Add the LessonTopic model before moving on.
+bin/rails generate model LessonTopic
+
+#13 test your new models.
+Add topics:
+ Topic.create(title:"SQL")
+ Topic.create(title:"Data Modeling")
+ Topic.create(title:"Javascript")
+ Topic.create(title:"CSS")
+ Topic.create(title:"Automated Testing")
+ Topic.create(title:"Debugging")	
+ Topic.create(title:"Web Request Cycle")
+ Topic.create(title:"HTTP")
+#check my adding topics:
+Topic.all
