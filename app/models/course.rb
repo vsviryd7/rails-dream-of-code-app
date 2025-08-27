@@ -4,4 +4,5 @@ class Course < ApplicationRecord
   has_many :enrollments
 
   delegate :title, to: :coding_class
+  
 end
