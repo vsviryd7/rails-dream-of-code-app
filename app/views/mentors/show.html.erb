@@ -8,3 +8,12 @@
 
   <%= button_to "Destroy this mentor", @mentor, method: :delete %>
 </div>
+
+ <h1>Mentor#show</h1>
+
+<p><strong>First Name:</strong> <%= @mentor.first_name %></p>
+<p><strong>Last Name:</strong> <%= @mentor.last_name %></p>
+<p><strong>Email:</strong> <%= @mentor.email %></p>
+<p><strong>Max Concurrent Students:</strong> <%= @mentor.max_concurrent_students %></p>
+
+<%= link_to "Back to all mentors", mentors_path %>
