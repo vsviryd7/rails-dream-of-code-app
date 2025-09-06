@@ -8,6 +8,9 @@ class CoursesController < ApplicationController
 
   # GET /courses/1 or /courses/1.json
   def show
+    @course = Course.find(params[:id])
+    @student_names = @course.student_name_list
+    @student_emails = @course.student_email_list
   end
 
   # GET /courses/new
@@ -46,6 +49,10 @@ class CoursesController < ApplicationController
     end
   end
 
+  def enrolled_students
+    @course = Course.find(params[:id])
+    @enrollments = @course.enrollments.includes(:student)
+  end
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_course

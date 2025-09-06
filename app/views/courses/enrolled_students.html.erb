@@ -1,0 +1,7 @@
+  <h1>Enrolled students</h1>
+ 
+  <ul>
+    <% @enrollments.each do |enrollment| %>
+      <li><%= enrollment.student.full_name %></li>
+    <% end %>
+  </ul>

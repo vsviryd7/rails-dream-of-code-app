@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 class Course < ApplicationRecord
   belongs_to :coding_class
   belongs_to :trimester
@@ -21,7 +20,7 @@ class Course < ApplicationRecord
     email_studens
   end
 end
-=======
+
 class Course < ApplicationRecord
   belongs_to :coding_class
   belongs_to :trimester
@@ -30,4 +29,4 @@ class Course < ApplicationRecord
   delegate :title, to: :coding_class
   
 end
->>>>>>> main
+

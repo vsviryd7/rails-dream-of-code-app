@@ -58,3 +58,22 @@ RSpec.describe "Api::V1::Courses", type: :request, skip: true do
     end
   end
 end
+# Course with students'
+describe "GET /courses/:id" do
+    let!(:student) { Student.create!(name: "Alice") }
+
+    before do
+      current_course.students << student
+    end
+
+    it "displays the course name" do
+      get course_path(current_course)
+      expect(response.body).to include("Intro to Javascript")
+    end
+
+    it "displays at least one student name" do
+      get course_path(current_course)
+      expect(response.body).to include("Alice")
+    end
+  end
+end
