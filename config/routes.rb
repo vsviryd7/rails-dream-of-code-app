@@ -9,11 +9,9 @@ Rails.application.routes.draw do
   resources :courses
   resources :coding_classes
   resources :trimesters
-<<<<<<< HEAD
   get "/dashboard", to: "admin_dashboard#index"
-=======
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
->>>>>>> 1a2613cb485859dbf0ceaaa35f9650f21f621f78
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
  
