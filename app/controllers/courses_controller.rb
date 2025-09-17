@@ -1,6 +1,6 @@
 class CoursesController < ApplicationController
   before_action :set_course, only: %i[ show edit update destroy ]
-
+  before_action :set_dropdowns, only: [:new, :edit, :create, :update]
   # GET /courses or /courses.json
   def index
     @courses = Course.all
@@ -16,6 +16,8 @@ class CoursesController < ApplicationController
   # GET /courses/new
   def new
     @course = Course.new
+    @coding_classes = CodingClass.all
+    @trimesters = Trimester.all
   end
 
   # GET /courses/1/edit
@@ -24,6 +26,12 @@ class CoursesController < ApplicationController
 
   # POST /courses or /courses.json
   def create
+    @course = Course.create!(course_params)
+
+    respond_to do |format|
+      format.html { redirect_to @course, notice: "Course was successfully created." }
+      format.json { render :show, status: :created, location: @course }
+    end
   end
 
   # PATCH/PUT /courses/1 or /courses/1.json
@@ -58,7 +66,10 @@ class CoursesController < ApplicationController
     def set_course
       @course = Course.find(params.expect(:id))
     end
-
+    def set_dropdowns
+      @coding_classes = CodingClass.all
+      @trimesters = Trimester.all
+    end
     # Only allow a list of trusted parameters through.
     def course_params
       params.expect(course: [ :coding_class_id, :trimester_id, :max_enrollment ])
