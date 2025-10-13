@@ -1,0 +1,42 @@
+<h1>New Trimester</h1>
+
+<%= form_with(model: @trimester, local: true) do |form| %>
+  <% if @trimester.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(@trimester.errors.count, "error") %> prevented saving:</h2>
+      <ul>
+        <% @trimester.errors.full_messages.each do |m| %><li><%= m %></li><% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :term %>
+    <%= form.select :term, ["Winter","Spring","Summer","Fall"], include_blank: true %>
+  </div>
+
+  <div>
+    <%= form.label :year %>
+    <%= form.number_field :year %>
+  </div>
+
+  <div>
+    <%= form.label :start_date %>
+    <%= form.date_field :start_date %>
+  </div>
+
+  <div>
+    <%= form.label :end_date %>
+    <%= form.date_field :end_date %>
+  </div>
+
+  <div>
+    <%= form.label :application_deadline %>
+    <%= form.date_field :application_deadline %>
+  </div>
+
+  <div style="margin-top:12px;">
+    <%= form.submit "Create Trimester" %>
+    <%= link_to "Cancel", trimesters_path %>
+  </div>
+<% end %>

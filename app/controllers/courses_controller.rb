@@ -1,5 +1,6 @@
 class CoursesController < ApplicationController
-  before_action :set_course, only: %i[ show edit update destroy ]
+  before_action :require_admin, only: %i[edit update destroy new create]
+  before_action :set_course, only: %i[show edit update destroy]
   before_action :set_dropdowns, only: [:new, :edit, :create, :update]
   # GET /courses or /courses.json
   def index

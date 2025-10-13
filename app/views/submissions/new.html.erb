@@ -1,6 +1,6 @@
-<h1>New Submission for <%= @course.title %></h1>
+<h1>New Submission for <%= @assignment.title %></h1>
 
-<%= form_with(model: [@course, @submission], local: true) do |form| %>
+<%= form_with(model: [@assignment, @submission], local: true) do |form| %>
   <% if @submission.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(@submission.errors.count, "error") %> prohibited this submission from being saved:</h2>
@@ -12,26 +12,29 @@
     </div>
   <% end %>
 
+  <!-- Lesson select (from the assignment's course) -->
   <div class="form-group">
     <%= form.label :lesson_id, "Lesson", class: "form-text" %>
     <%= form.select :lesson_id,
-          options_from_collection_for_select(@lessons, :id, :title),
-          { prompt: 'Select Lesson' },
-          { class: 'form-control' } %>
+          options_from_collection_for_select(@lessons, :id, :title, @submission.lesson_id),
+          { prompt: "Select Lesson" },
+          { class: "form-control" } %>
   </div>
 
+  <!-- Student does NOT choose enrollment_id; controller assigns it -->
   <div class="form-group">
-    <%= form.label :enrollment_id, "Student", class: "form-text" %>
-    <%= form.select :enrollment_id,
-          options_from_collection_for_select(@enrollments, :id, :student_name),
-          { prompt: 'Select Student' },
-          { class: 'form-control' } %>
-
-  <div class="form-group">
-    <%= form.label :url, 'URL', class: 'form-text' %>
-    <%= form.text_field :url, class: 'form-control' %>
+    <%= form.label :url, "URL", class: "form-text" %>
+    <%= form.url_field :url, class: "form-control" %>
   </div>
+
+  <!-- Optional content/notes fields if you use them -->
+  <%# 
+  <div class="form-group">
+    <%= form.label :content, "Notes", class: "form-text" %>
+    <%= form.text_area :content, rows: 4, class: "form-control" %>
+  </div>
+  %>
 
   <hr />
-  <%= form.submit 'Submit', class: 'btn btn-primary' %>
+  <%= form.submit "Submit", class: "btn btn-primary" %>
 <% end %>

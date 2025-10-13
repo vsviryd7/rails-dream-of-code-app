@@ -1,28 +1,41 @@
 class TrimestersController < ApplicationController
-  before_action :set_trimester, only: [:show, :edit, :update]
+  before_action :require_admin, only: [:new, :create, :edit, :update, :destroy]
+  before_action :set_trimester, only: [:show, :edit, :update, :destroy]
 
   def index
-    @trimesters = Trimester.all
-    @mentors = Mentor.all 
+    @trimesters = Trimester.order(year: :desc, term: :asc)
   end
+
   def show
-    @trimester = Trimester.find(params[:id])
-    @mentors = Mentor.all
   end
+
+  def new
+    @trimester = Trimester.new
+  end
+
+  def create
+    @trimester = Trimester.new(trimester_params)
+    if @trimester.save
+      redirect_to @trimester, notice: "Trimester was successfully created."
+    else
+      render :new, status: :unprocessable_entity
+    end
+  end
+
   def edit
-    # @trimester is set by before_action
   end
 
   def update
-    if params[:trimester][:application_deadline].blank?
-      render plain: "Application deadline required", status: :bad_request
-    elsif !valid_date?(params[:trimester][:application_deadline])
-      render plain: "Invalid date format", status: :bad_request
-    elsif @trimester.update(trimester_params)
+    if @trimester.update(trimester_params)
       redirect_to @trimester, notice: "Trimester was successfully updated."
     else
       render :edit, status: :unprocessable_entity
     end
+  end
+
+  def destroy
+    @trimester.destroy
+    redirect_to trimesters_path, notice: "Trimester was successfully deleted."
   end
 
   private
@@ -30,18 +43,10 @@ class TrimestersController < ApplicationController
   def set_trimester
     @trimester = Trimester.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    render plain: "Not Found", status: :not_found
+    redirect_to trimesters_path, alert: "Trimester not found."
   end
 
   def trimester_params
-    params.require(:trimester).permit(:year, :term, :application_deadline, :start_date, :end_date)
+    params.require(:trimester).permit(:term, :year, :start_date, :end_date, :application_deadline)
   end
-
-  def valid_date?(date_str)
-    Date.parse(date_str)
-    true
-  rescue ArgumentError
-    false
-  end
-
 end
