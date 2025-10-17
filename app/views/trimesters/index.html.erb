@@ -1,10 +1,18 @@
 <h1>Trimesters</h1>
 <ul>
   <% @trimesters.each do |trimester| %>
-   <li>
-    <%= link_to "#{trimester.term} #{trimester.year}", trimester_path(trimester) %>
-    |
-    <%= link_to "Edit", edit_trimester_path(trimester) %>
-   </li>
+    <li>
+      <%= link_to "#{trimester.term} #{trimester.year}", trimester_path(trimester) %>
+      <% if session[:role] == 'admin' %>
+        | <%= link_to "Edit", edit_trimester_path(trimester) %>
+        | <%= link_to "Destroy", trimester_path(trimester),
+              method: :delete,
+              data: { confirm: "Are you sure you want to delete this trimester?" } %>
+      <% end %>
+    </li>
   <% end %>
-<ul>
+</ul>
+
+<% if session[:role] == 'admin' %>
+  <%= link_to "New Trimester", new_trimester_path %>
+<% end %>

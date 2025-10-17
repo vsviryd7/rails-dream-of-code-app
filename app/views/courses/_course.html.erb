@@ -17,5 +17,12 @@
     <strong>Max enrollment:</strong>
     <%= course.max_enrollment %>
   </p>
-
+  <% if session[:role] == 'admin' %>
+    <p>
+      <%= link_to "Edit this course", edit_course_path(course) %> |
+      <%= link_to "Destroy this course", course,
+            method: :delete,
+            data: { confirm: "Are you sure?" } %>
+    </p>
+  <% end %>
 </div>

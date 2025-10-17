@@ -10,7 +10,12 @@ Rails.application.routes.draw do
   resources :coding_classes
   resources :trimesters
   get "/dashboard", to: "admin_dashboard#index"
-
+  get 'login', to: 'sessions#new'
+  post 'login', to: 'sessions#create'
+  delete 'logout', to: 'sessions#destroy'
+  resources :assignments do
+  resources :submissions, only: [:index, :show, :new, :create, :edit, :update]
+end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

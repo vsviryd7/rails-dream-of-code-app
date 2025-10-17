@@ -1,0 +1,27 @@
+<!-- app/views/submissions/edit.html.erb -->
+<h1>Review Submission</h1>
+
+<%= form_with(model: [@assignment, @submission], local: true) do |f| %>
+  <% if @submission.errors.any? %>
+    <div style="color:red">
+      <h2><%= pluralize(@submission.errors.count, "error") %> prevented saving:</h2>
+      <ul><% @submission.errors.full_messages.each { |m| %><li><%= m %></li><% } %></ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.label :review_result %>
+    <%= f.text_field :review_result %>
+    <%# or a select: f.select :review_result, ["Approved","Needs Work","Rejected"] %>
+  </div>
+
+  <div>
+    <%= f.label :reviewed_at %>
+    <%= f.datetime_field :reviewed_at %>
+  </div>
+
+  <div style="margin-top:12px;">
+    <%= f.submit "Save Review" %>
+    <%= link_to "Back", assignment_submission_path(@assignment, @submission) %>
+  </div>
+<% end %>
