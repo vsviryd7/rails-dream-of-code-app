@@ -23,12 +23,11 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :courses, only: [:index] do
-        resources :enrollments, only: [:index]
-      end
+      get '/courses', to: 'courses#index'
+      get '/courses/:course_id/enrollments', to: 'enrollments#index'
+      post '/students', to: 'students#create'
     end
   end
-end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
