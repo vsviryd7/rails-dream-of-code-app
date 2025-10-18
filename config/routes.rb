@@ -12,9 +12,9 @@ Rails.application.routes.draw do
   get "/dashboard", to: "admin_dashboard#index"
 
   namespace :api do
-  namespace :v1 do
-    resources :courses, only: [:index] do
-      resources :enrollments, only: [:index]
+    namespace :v1 do
+      resources :courses, only: [:index] do
+        resources :enrollments, only: [:index]
     end
   end
 end
