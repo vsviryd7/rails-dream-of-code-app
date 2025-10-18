@@ -1,36 +1,66 @@
 class SubmissionsController < ApplicationController
-  # GET /submissions/new
+  before_action :set_assignment
+  before_action :require_student, only: [:new, :create]
+  before_action :require_mentor,  only: [:edit, :update]
+
   def new
-    @course = Course.find(params[:course_id])
     @submission = Submission.new
-    @enrollments = @course.enrollments # TODO: What set of enrollments should be listed in the dropdown?
-    @lessons = @course.lessons # TODO: What set of lessons should be listed in the dropdown?
+    course = @assignment.course
+    @enrollment = course.enrollments.find_by(student_id: session[:user_id]) # or user_id
+    unless @enrollment
+      redirect_to assignment_path(@assignment), alert: "You must be enrolled in this course to submit."
+      return
+    end
+    @lessons = course.lessons
   end
 
   def create
-    @course = Course.find(params[:course_id])
-    @submission = Submission.new(submission_params)
+    course = @assignment.course
+    @enrollment = course.enrollments.find_by(student_id: session[:user_id]) # or user_id
+    unless @enrollment
+      redirect_to assignment_path(@assignment), alert: "You must be enrolled in this course to submit."
+      return
+    end
+
+    @submission = Submission.new(student_submission_params)
+    @submission.enrollment_id = @enrollment.id  # force ownership
 
     if @submission.save
-      redirect_to course_path(@course), notice: 'Submission was successfully created.'
+      redirect_to assignment_path(@assignment), notice: "Submission was successfully created."
     else
-      @enrollments = @course.enrollments # TODO: Set this up just as in the new action
-      @lessons = @course.lessons # TODO: Set this up just as in the new action
-      render :new
+      @lessons = course.lessons
+      render :new, status: :unprocessable_entity
     end
   end
 
-  # GET /submissions/1/edit
   def edit
+    @submission = @assignment.submissions.find(params[:id])
   end
 
-  # PATCH/PUT /submissions/1 or /submissions/1.json
   def update
+    @submission = @assignment.submissions.find(params[:id])
+    @submission.mentor_id = session[:user_id]
+    
+    if @submission.update(review_params)
+      redirect_to assignment_path(@assignment), notice: "Submission was updated."
+    else
+      render :edit, status: :unprocessable_entity
+    end
   end
 
   private
-    # Only allow a list of trusted parameters through.
-    def submission_params
-      params.require(:submission).permit(:lesson_id, :enrollment_id, :mentor_id, :review_result, :reviewed_at)
-    end
+
+  def set_assignment
+    @assignment = Assignment.find(params[:assignment_id])
+  end
+
+  # student params ONLY
+  def student_submission_params
+    params.require(:submission).permit(:lesson_id, :content, :attachment_url, :notes)
+  end
+
+  # mentor/admin review params
+  def review_params
+    params.require(:submission).permit(:mentor_id, :review_result, :reviewed_at)
+  end
 end
