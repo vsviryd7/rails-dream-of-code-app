@@ -12,10 +12,19 @@ Rails.application.routes.draw do
   get "/dashboard", to: "admin_dashboard#index"
 
   namespace :api do
-    namespace :v1 do
-      get '/courses', to: 'courses#index'
-      get '/courses/:course_id/enrollments', to: 'enrollments#index'
+  namespace :v1 do
+    resources :courses, only: [:index] do
+      resources :enrollments, only: [:index]
     end
+  end
+end
+
+  get "login",  to: "sessions#new"
+  post "login", to: "sessions#create"
+  delete "logout", to: "sessions#destroy"
+
+  resources :assignments do
+    resources :submissions, only: [:index, :show, :new, :create, :edit, :update]
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
